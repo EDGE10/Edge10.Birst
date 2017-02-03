@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edge10.Birst", "Edge10.Birst.csproj", "{D670809E-BB65-4CBF-8E78-CAEBBC6646BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edge10.Birst", "Edge10.Birst\Edge10.Birst.csproj", "{D670809E-BB65-4CBF-8E78-CAEBBC6646BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edge10.Birst.Tests", "..\Edge10.Birst.Tests\Edge10.Birst.Tests.csproj", "{DEBB2B6B-7F1E-4511-9FB3-50D5D5BA951B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edge10.Birst.Tests", "Edge10.Birst.Tests\Edge10.Birst.Tests.csproj", "{DEBB2B6B-7F1E-4511-9FB3-50D5D5BA951B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
