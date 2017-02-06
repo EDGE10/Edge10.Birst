@@ -23,7 +23,7 @@ namespace Edge10.Birst
 			job.RunToCompletion();
 		}
 
-		public static void RunPublisDataJob(this IBirstAdminService adminService, string spaceId, IEnumerable<string> processingGroups)
+		public static void RunPublishDataJob(this IBirstAdminService adminService, string spaceId, IEnumerable<string> processingGroups)
 		{
 			var job = new BirstJob(svc =>
 				svc.PublishData(spaceId, processingGroups),
