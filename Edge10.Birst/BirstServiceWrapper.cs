@@ -13,7 +13,7 @@ namespace Edge10.Birst
 	/// </summary>
 	public class BirstServiceWrapper : IBirstServiceWrapper
 	{
-		private Lazy<CommandWebService> _service;
+		private CommandWebService _service;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BirstServiceWrapper"/> class.
@@ -23,18 +23,14 @@ namespace Edge10.Birst
 		{
 			if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 			
+			if (configuration.Uri == null)
+				throw new BirstException("Birst has not been configured for this environment");
 			
-			_service = new Lazy<CommandWebService>(() =>
+			_service = new CommandWebService
 			{
-				if (configuration.Uri == null)
-					throw new BirstException("Birst has not been configured for this environment");
-
-				return new CommandWebService
-				{
-					Url             = new Uri(configuration.Uri, "CommandWebservice.asmx").ToString(),
-					CookieContainer = new CookieContainer()
-				};
-			});
+				Url             = new Uri(configuration.Uri, "CommandWebservice.asmx").ToString(),
+				CookieContainer = new CookieContainer()
+			};
 		}
 
 		/// <summary>
@@ -46,7 +42,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public string Login(string username, string password)
 		{
-			return _service.Value.Login(username, password);
+			return _service.Login(username, password);
 		}
 
 		/// <summary>
@@ -59,7 +55,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public FileNode GetDirectoryContents(string token, string spaceID, string dir)
 		{
-			return _service.Value.getDirectoryContents(token, spaceID, dir);
+			return _service.getDirectoryContents(token, spaceID, dir);
 		}
 
 		/// <summary>
@@ -71,7 +67,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public void CreateUser(string token, string username, string additionalParameters)
 		{
-			_service.Value.addUser(token, username, additionalParameters);
+			_service.addUser(token, username, additionalParameters);
 		}
 
 		/// <summary>
@@ -84,7 +80,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public void AddUserToSpace(string token, string username, string spaceId, bool hasAdmin)
 		{
-			_service.Value.addUserToSpace(token, username, spaceId, hasAdmin);
+			_service.addUserToSpace(token, username, spaceId, hasAdmin);
 		}
 
 		/// <summary>
@@ -97,7 +93,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public void AddUserToGroupInSpace(string token, string username, string groupName, string spaceId)
 		{
-			_service.Value.addUserToGroupInSpace(token, username, groupName, spaceId);
+			_service.addUserToGroupInSpace(token, username, groupName, spaceId);
 		}
 
 		/// <summary>
@@ -109,7 +105,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public void AddProductToUser(string token, string username, int productId)
 		{
-			_service.Value.addProductToUser(token, username, productId);
+			_service.addProductToUser(token, username, productId);
 		}
 
 		/// <summary>
@@ -142,7 +138,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public void SetUserPassword(string token, string username, string password)
 		{
-			_service.Value.setUserPassword(token, username, password);
+			_service.setUserPassword(token, username, password);
 		}
 
 		/// <summary>
@@ -158,7 +154,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public string ExtractCloudConnectorData(string token, string spaceId, IEnumerable<CloudConnection> connections)
 		{
-			return _service.Value.extractCloudConnectorData(token, spaceId, connections.ToArray());
+			return _service.extractCloudConnectorData(token, spaceId, connections.ToArray());
 		}
 
 		/// <summary>
@@ -175,7 +171,7 @@ namespace Edge10.Birst
 		{
 			//note: according to Birst recommendation, always use UTC now for date.  This sets the
 			//processing date so never really want to backdate it
-			return _service.Value.publishData(token, spaceId, processingGroups.ToArray(), DateTime.UtcNow);
+			return _service.publishData(token, spaceId, processingGroups.ToArray(), DateTime.UtcNow);
 		}
 
 		/// <summary>
@@ -189,7 +185,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public bool IsJobComplete(string token, string jobToken)
 		{
-			return _service.Value.isJobComplete(token, jobToken);
+			return _service.isJobComplete(token, jobToken);
 		}
 
 		/// <summary>
@@ -201,7 +197,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public IEnumerable<string> ListGroupsInSpace(string token, string spaceId)
 		{
-			return _service.Value.listGroupsInSpace(token, spaceId);
+			return _service.listGroupsInSpace(token, spaceId);
 		}
 
 		/// <summary>
@@ -215,7 +211,7 @@ namespace Edge10.Birst
 		[ExcludeFromCodeCoverage]
 		public StatusResult GetJobStatus(string token, string jobToken)
 		{
-			return _service.Value.getJobStatus(token, jobToken);
+			return _service.getJobStatus(token, jobToken);
 		}
 
 		private bool IsLoginFailureException(SoapException e)

@@ -37,10 +37,10 @@ namespace Edge10.Birst.Tests
 
 			//testing this using a private object reading the internal service field as nothing
 			//public can run this without making a call to the live service
-			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as Lazy<CommandWebService>;
+			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as CommandWebService;
 
-			Assert.AreEqual("http://birst/CommandWebservice.asmx", service.Value.Url.ToString());
-			Assert.IsNotNull(service.Value.CookieContainer);
+			Assert.AreEqual("http://birst/CommandWebservice.asmx", service.Url.ToString());
+			Assert.IsNotNull(service.CookieContainer);
 		}
 
 		[Test]
@@ -48,9 +48,7 @@ namespace Edge10.Birst.Tests
 		{
 			_configuration.Setup(c => c.Uri).Returns<Uri>(null);
 
-			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as Lazy<CommandWebService>;
-
-			Assert.Throws<BirstException>(() => service.Value.Login("", ""));
+			Assert.Throws<BirstException>(() => new BirstServiceWrapper(_configuration.Object));
 		}
 	}
 }
