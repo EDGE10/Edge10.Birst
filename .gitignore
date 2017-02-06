@@ -250,3 +250,6 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+*.ncrunchsolution
+Edge10.Birst.Tests/Edge10.Birst.Tests.v2.ncrunchproject
+*.ncrunchproject
