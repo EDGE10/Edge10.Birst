@@ -5,6 +5,8 @@ using Edge10.Birst.BirstWebService;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
+using System.Xml;
 using Edge10.Birst.Utils;
 
 namespace Edge10.Birst.Tests
@@ -179,6 +181,20 @@ namespace Edge10.Birst.Tests
 
 			var result = this.TestSubject.GetJobStatus("job token");
 			Assert.AreEqual(serviceStatus, result);
+		}
+		
+		[Test]
+		public void GetJobStatus_Returns_Failed_On_Soap_Exception()
+		{
+			var authToken = SetupLogin();
+
+			_birstServiceWrapper.Setup(b => b.GetJobStatus(authToken, "job token"))
+				.Throws(new SoapException("Oops", XmlQualifiedName.Empty));
+
+			var result = TestSubject.GetJobStatus("job token");
+			
+			Assert.AreEqual("Failed", result.statusCode);
+			Assert.AreEqual("Oops", result.message);
 		}
 
 		[Test]
