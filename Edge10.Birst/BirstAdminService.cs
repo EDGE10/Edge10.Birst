@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using Edge10.Birst.BirstWebService;
 using Edge10.Birst.Utils;
 
@@ -120,7 +121,19 @@ namespace Edge10.Birst
 		public StatusResult GetJobStatus(string jobToken)
 		{
 			var authToken = Login();
-			return _birstServiceWrapper.GetJobStatus(authToken, jobToken);
+			try
+			{
+				return _birstServiceWrapper.GetJobStatus(authToken, jobToken);
+			}
+			catch (SoapException e)
+			{
+				return new StatusResult
+				{
+					statusCode = "Failed",
+					message = e.Message
+				};
+			}
+
 		}
 
 		/// <summary>
