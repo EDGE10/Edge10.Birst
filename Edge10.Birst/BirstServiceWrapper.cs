@@ -22,13 +22,30 @@ namespace Edge10.Birst
 		public BirstServiceWrapper(IBirstConfiguration configuration)
 		{
 			if (configuration == null) throw new ArgumentNullException(nameof(configuration));
-			
+
 			if (configuration.Uri == null)
 				throw new BirstException("Birst has not been configured for this environment");
-			
+
+			CreateService(configuration.Uri);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BirstServiceWrapper"/> class.
+		/// </summary>
+		/// <param name="uri">The URI.</param>
+		/// <exception cref="ArgumentNullException">uri</exception>
+		public BirstServiceWrapper(Uri uri)
+		{
+			if (uri == null) throw new ArgumentNullException(nameof(uri));
+
+			CreateService(uri);
+		}
+
+		private void CreateService(Uri uri)
+		{
 			_service = new CommandWebService
 			{
-				Url             = new Uri(configuration.Uri, "CommandWebservice.asmx").ToString(),
+				Url             = new Uri(uri, "CommandWebservice.asmx").ToString(),
 				CookieContainer = new CookieContainer()
 			};
 		}

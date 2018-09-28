@@ -27,20 +27,8 @@ namespace Edge10.Birst.Tests
 		[Test]
 		public void Constructor_Throws_Exception_On_Null_Parameters()
 		{
-			Assert.Throws<ArgumentNullException>(() => new BirstServiceWrapper(null));
-		}
-
-		[Test]
-		public void EnsureConfigured_Is_Called_Then_Url_And_CookieContainer_Are_Set_On_Service()
-		{
-			_configuration.Setup(c => c.Uri).Returns(new Uri("http://birst"));
-
-			//testing this using a private object reading the internal service field as nothing
-			//public can run this without making a call to the live service
-			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as CommandWebService;
-
-			Assert.AreEqual("http://birst/CommandWebservice.asmx", service.Url.ToString());
-			Assert.IsNotNull(service.CookieContainer);
+			Assert.That(() => new BirstServiceWrapper((IBirstConfiguration)null), Throws.ArgumentNullException);
+			Assert.That(() => new BirstServiceWrapper((Uri)null), Throws.ArgumentNullException);
 		}
 
 		[Test]
@@ -48,7 +36,31 @@ namespace Edge10.Birst.Tests
 		{
 			_configuration.Setup(c => c.Uri).Returns<Uri>(null);
 
-			Assert.Throws<BirstException>(() => new BirstServiceWrapper(_configuration.Object));
+			Assert.That(() => new BirstServiceWrapper(_configuration.Object), Throws.InstanceOf<BirstException>());
+		}
+
+		[Test]
+		public void Url_And_CookieContainer_Are_Set_On_Service_From_Configuration()
+		{
+			_configuration.Setup(c => c.Uri).Returns(new Uri("http://birst"));
+
+			//testing this using a private object reading the internal service field as nothing
+			//public can run this without making a call to the live service
+			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as CommandWebService;
+
+			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebservice.asmx"));
+			Assert.That(service.CookieContainer, Is.Not.Null);
+		}
+
+		[Test]
+		public void Url_And_CookieContainer_Are_Set_On_Service_From_Uri()
+		{
+			//testing this using a private object reading the internal service field as nothing
+			//public can run this without making a call to the live service
+			var service = new MsTest.PrivateObject(new BirstServiceWrapper(new Uri("http://birst"))).GetField("_service") as CommandWebService;
+
+			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebservice.asmx"));
+			Assert.That(service.CookieContainer, Is.Not.Null);
 		}
 	}
 }
