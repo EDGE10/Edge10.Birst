@@ -32,7 +32,7 @@ namespace Edge10.Birst
 		{
 			if (birstConfiguration == null) throw new ArgumentNullException(nameof(birstConfiguration));
 			if (birstServiceWrapper == null) throw new ArgumentNullException(nameof(birstServiceWrapper));
-			if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));			
+			if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
 
 			_birstConfiguration  = birstConfiguration;
 			_birstServiceWrapper = birstServiceWrapper;
@@ -142,15 +142,16 @@ namespace Edge10.Birst
 		/// <returns></returns>
 		public Task<string> GetSSOToken()
 		{
-			return GetSSOToken(_birstConfiguration.SpaceId, _birstConfiguration.SSOPassword, _birstConfiguration.Email);
+			return GetSSOToken(_birstConfiguration.Uri, _birstConfiguration.SpaceId, _birstConfiguration.SSOPassword, _birstConfiguration.Email);
 		}
 
 		/// <summary>
 		/// Gets the SSO token using provided credentials.
 		/// </summary>
 		/// <returns></returns>
-		public async Task<string> GetSSOToken(string spaceId, string ssoPassword, string username)
+		public async Task<string> GetSSOToken(Uri uri, string spaceId, string ssoPassword, string username)
 		{
+			if (uri         == null) throw new ArgumentNullException(nameof(uri));
 			if (spaceId     == null) throw new ArgumentNullException(nameof(spaceId));
 			if (ssoPassword == null) throw new ArgumentNullException(nameof(ssoPassword));
 			if (username    == null) throw new ArgumentNullException(nameof(username));
@@ -165,7 +166,7 @@ namespace Edge10.Birst
 			using (new SecurityProtocolContext())
 			{
 				var response =
-					await _httpClient.PostAsync(new Uri(_birstConfiguration.Uri, "tokengenerator.aspx"), tokenGeneratorContent);
+					await _httpClient.PostAsync(new Uri(uri, "tokengenerator.aspx"), tokenGeneratorContent);
 
 				if (!response.IsSuccessStatusCode)
 					return null;
