@@ -226,12 +226,10 @@ namespace Edge10.Birst.Tests
 		[Test]
 		public async Task GetSSOToken_Returns_Token_With_Parameters()
 		{
-			_birstConfiguration.Setup(c => c.Uri).Returns(new Uri("http://birst"));
-
 			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/tokengenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID_1&birst.ssopassword=SSO_Password_1&birst.username=email%40somewhere.com_1")))
 				.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("token_response") });
 
-			var token = await TestSubject.GetSSOToken("Space_ID_1", "SSO_Password_1", "email@somewhere.com_1");
+			var token = await TestSubject.GetSSOToken(new Uri("http://birst"), "Space_ID_1", "SSO_Password_1", "email@somewhere.com_1");
 
 			Assert.AreEqual("token_response", token);
 		}
@@ -239,9 +237,10 @@ namespace Edge10.Birst.Tests
 		[Test]
 		public void GetSSOToken_Throws_On_Null_Parameters()
 		{
-			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken(null, "sso-password", "username"));
-			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken("space-id", null, "username"));
-			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken("space-id", "sso-password", null));
+			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken(null, "space-id", "sso-password", "username"));
+			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken(new Uri("http://birst"), null, "sso-password", "username"));
+			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken(new Uri("http://birst"), "space-id", null, "username"));
+			Assert.ThrowsAsync<ArgumentNullException>(() => TestSubject.GetSSOToken(new Uri("http://birst"), "space-id", "sso-password", null));
 		}
 
 		private void SetupSettings()

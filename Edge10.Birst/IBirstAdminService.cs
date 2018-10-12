@@ -1,4 +1,5 @@
 ﻿using Edge10.Birst.BirstWebService;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -66,6 +67,6 @@ namespace Edge10.Birst
 		/// Gets the SSO token using provided credentials.
 		/// </summary>
 		/// <returns></returns>
-		Task<string> GetSSOToken(string spaceId, string ssoPassword, string username);
+		Task<string> GetSSOToken(Uri uri, string spaceId, string ssoPassword, string username);
 	}
 }
