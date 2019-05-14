@@ -203,7 +203,7 @@ namespace Edge10.Birst.Tests
 			SetupSettings();
 
 			//use a callback to check that during the post request we have set the required security protocol
-			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/tokengenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID&birst.ssopassword=SSO_Password&birst.username=email%40somewhere.com")))
+			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/TokenGenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID&birst.ssopassword=SSO_Password&birst.username=email%40somewhere.com")))
 				.Callback(() => Assert.IsTrue(ServicePointManager.SecurityProtocol.HasFlag(SecurityProtocolType.Tls12)))
 				.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest));
 
@@ -215,7 +215,7 @@ namespace Edge10.Birst.Tests
 		{
 			SetupSettings();
 
-			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/tokengenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID&birst.ssopassword=SSO_Password&birst.username=email%40somewhere.com")))
+			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/TokenGenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID&birst.ssopassword=SSO_Password&birst.username=email%40somewhere.com")))
 				.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("token_response") });
 
 			var token = await TestSubject.GetSSOToken();
@@ -226,7 +226,7 @@ namespace Edge10.Birst.Tests
 		[Test]
 		public async Task GetSSOToken_Returns_Token_With_Parameters()
 		{
-			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/tokengenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID_1&birst.ssopassword=SSO_Password_1&birst.username=email%40somewhere.com_1")))
+			_httpClient.Setup(h => h.PostAsync(new Uri("http://birst/TokenGenerator.aspx"), It.Is<FormUrlEncodedContent>(c => c.ReadAsStringAsync().Result == "birst.spaceId=Space_ID_1&birst.ssopassword=SSO_Password_1&birst.username=email%40somewhere.com_1")))
 				.ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("token_response") });
 
 			var token = await TestSubject.GetSSOToken(new Uri("http://birst"), "Space_ID_1", "SSO_Password_1", "email@somewhere.com_1");
