@@ -48,7 +48,7 @@ namespace Edge10.Birst.Tests
 			//public can run this without making a call to the live service
 			var service = new MsTest.PrivateObject(new BirstServiceWrapper(_configuration.Object)).GetField("_service") as CommandWebService;
 
-			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebservice.asmx"));
+			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebService.asmx"));
 			Assert.That(service.CookieContainer, Is.Not.Null);
 		}
 
@@ -59,7 +59,7 @@ namespace Edge10.Birst.Tests
 			//public can run this without making a call to the live service
 			var service = new MsTest.PrivateObject(new BirstServiceWrapper(new Uri("http://birst"))).GetField("_service") as CommandWebService;
 
-			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebservice.asmx"));
+			Assert.That(service.Url, Is.EqualTo("http://birst/CommandWebService.asmx"));
 			Assert.That(service.CookieContainer, Is.Not.Null);
 		}
 	}
