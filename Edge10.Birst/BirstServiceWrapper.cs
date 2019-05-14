@@ -45,7 +45,7 @@ namespace Edge10.Birst
 		{
 			_service = new CommandWebService
 			{
-				Url             = new Uri(uri, "CommandWebservice.asmx").ToString(),
+				Url             = new Uri(uri, "CommandWebService.asmx").ToString(),
 				CookieContainer = new CookieContainer()
 			};
 		}
