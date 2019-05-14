@@ -166,7 +166,7 @@ namespace Edge10.Birst
 			using (new SecurityProtocolContext())
 			{
 				var response =
-					await _httpClient.PostAsync(new Uri(uri, "tokengenerator.aspx"), tokenGeneratorContent);
+					await _httpClient.PostAsync(new Uri(uri, "TokenGenerator.aspx"), tokenGeneratorContent);
 
 				if (!response.IsSuccessStatusCode)
 					return null;
